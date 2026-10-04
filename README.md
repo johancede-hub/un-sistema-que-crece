@@ -1,115 +1,90 @@
-# Sistema de Inventario y Crafteo
 
-**Estructura de datos | Actividad evaluativa final: "Un sistema que crece"**
-**Autor:** Johan Sebastian Cedeño
-**Lenguaje:** Python 3
+# Sistema de Inventario y Crafteo de Videojuegos
+
+## 1. Nombre del sistema
+**Sistema de Inventario y Crafteo de Videojuegos**
 
 ---
 
-## 1. El caso (explicado sin tecnicismos)
+## 2. Descripción no técnica del caso
+Este sistema simula la administración de objetos e inventario para un personaje de videojuego. Permite al jugador:
+- Guardar, buscar y retirar objetos de su mochila.
+- Mantener un historial para deshacer las últimas acciones realizadas.
+- Consultar un catálogo de ítems mediante un código identificador numérico (ID).
+- Consultar recetas de crafteo para saber qué elementos se pueden combinar entre sí para fabricar nuevos objetos.
 
-Es el inventario de un videojuego. El jugador lleva una **mochila** donde guarda objetos (Piedra, Palo, Hierro, Pluma). Todos los objetos que existen en el juego están registrados en un **catálogo**, y cada uno tiene un número de identificación (ID).
+---
 
-El sistema permite:
+## 3. Diagrama o listado de las clases y de la estructura que usa cada componente
 
-- **Guardar y sacar** objetos de la mochila, buscar si un objeto está en ella y ver su contenido.
-- **Deshacer** la última acción (si sacaste algo por error, vuelve a la mochila).
-- **Consultar el catálogo** ordenado por ID y encontrar un objeto rápidamente a partir de su ID.
-- **Saber qué objetos se pueden combinar** entre sí (crafteo): por ejemplo, Piedra + Palo.
+### **Componente 1: Mochila (Inventario)**
+- `Mochila`: Clase base (interfaz o contrato).
+- `MochilaArreglo`: Utiliza un **Arreglo de tamaño fijo**.
+- `NodoObjeto`: Nodo básico (`dato`, `siguiente`).
+- `MochilaListaEnlazada`: Utiliza una **Lista Simplemente Enlazada**.
 
-## 2. Estructuras usadas y por qué
+### **Componente 2: Historial (Deshacer)**
+- `Pila`: Clase base para comportamiento LIFO (Last In, First Out).
+- `PilaArreglo`: Utiliza un **Arreglo de tamaño fijo** con índice de cima.
+- `NodoPila`: Nodo básico para la pila enlazada.
+- `PilaListaEnlazada`: Utiliza una **Lista Simplemente Enlazada**.
 
-Todas las estructuras son de implementación propia (no se usan `LinkedList`, `deque`, etc.).
+### **Componente 3: Catálogo por ID**
+- `NodoArbol`: Nodo que almacena `clave`, `nombre`, e hijos `izquierda` y `derecha`.
+- `ArbolBinarioBusqueda`: Utiliza un **Árbol Binario de Búsqueda (ABB)**.
 
-| Componente | Estructura | Para qué se usa | Por qué esa estructura |
-|---|---|---|---|
-| A | **Lista enlazada simple** (`MochilaListaEnlazada`) | Guardar los objetos de la mochila | Solo se necesita avanzar hacia adelante (recorrer, buscar, eliminar). La lista doble gastaría un enlace extra por nodo sin necesidad. No tiene límite fijo de espacios. |
-| A | **Pila** (`PilaListaEnlazada`) | Historial para deshacer | Lo último que se hizo es lo primero que se deshace (LIFO). Una cola sacaría lo más antiguo, que no sirve para deshacer. |
-| B | **Árbol binario de búsqueda** (`ArbolBinarioBusqueda`) | Catálogo de objetos por ID | Permite buscar por clave descartando la mitad de los datos en cada paso, y el recorrido inorden entrega el listado ordenado. |
-| C | **Grafo con listas de adyacencia** (`Grafo`) | Relaciones de crafteo | La relación "se pueden combinar" no es jerárquica: un objeto puede combinarse con varios y va en ambos sentidos. Las listas de adyacencia guardan solo las conexiones que existen. |
-| D | **Un contrato, dos implementaciones** (`IPila`) | Pila con arreglo y pila con lista enlazada | Permite cambiar la implementación sin modificar el resto del programa. |
+### **Componente 4: Recetas de Crafteo**
+- `NodoVertice`: Nodo que representa un ítem, contiene su lista de objetos combinables (`MochilaListaEnlazada`) y puntero al siguiente vértice.
+- `Grafo`: Utiliza una **Lista de Adyacencia** basada en listas enlazadas para representar un grafo no dirigido.
 
-### Cómo se conectan
+---
 
-La clase `Inventario` une los componentes:
+## 4. Justificación técnica de cada estructura elegida
 
-1. Al **agregar** un objeto por ID, busca el ID en el catálogo (árbol), guarda el nombre en la mochila (lista) y apila la acción en el historial (pila).
-2. Al **deshacer**, desapila la última acción y hace lo contrario.
-3. El grafo usa los mismos objetos del inventario.
+- **Arreglo (Mochila / Pila):** Adecuado cuando el inventario o historial tiene una capacidad máxima estricta y definida desde el inicio. Ocupa memoria contigua.
+- **Lista Enlazada (Mochila / Pila):** Permite gestionar memoria de forma dinámica. La estructura crece y se reduce a medida que se agregan o quitan objetos, evitando límites rígidos.
+- **Pila (LIFO):** Es la estructura idónea para la función "Deshacer" (Undo), pues la última acción registrada es siempre la primera en revertirse.
+- **Árbol Binario de Búsqueda (ABB):** Permite organizar los objetos por un código ID y realizar búsquedas de forma jerárquica, además de permitir recorridos ordenados (Inorden).
+- **Grafo con Lista de Adyacencia:** Estructura óptima para representar relaciones N a N, permitiendo conectar bidireccionalmente los objetos que se combinan para craftear.
 
-## 3. Estructura del código
+---
 
-El archivo `sistema_inventario.py` sigue este orden:
+## 5. Comparación entre la implementación con arreglo y lista enlazada
 
-1. `IMochila`: contrato de la mochila (mostrar, agregar, quitar, buscar)
-2. `MochilaArreglo`: mochila con arreglo de tamaño fijo
-3. `NodoObjeto` y `MochilaListaEnlazada`: mochila con lista enlazada
-4. `IPila`: contrato de la pila (apilar, desapilar, ver cima, está vacía)
-5. `PilaArreglo`: pila con arreglo de tamaño fijo
-6. `NodoPila` y `PilaListaEnlazada`: pila con lista enlazada
-7. `NodoArbol` y `ArbolBinarioBusqueda`: catálogo (inserción, búsqueda, preorden, inorden, postorden y altura, todos recursivos)
-8. `NodoVecino`, `ListaVecinos`, `NodoVertice` y `Grafo`: relaciones de crafteo
-9. `Accion` e `Inventario`: unen todos los componentes
-10. `main`: demostración
+| Operación | Implementación con Arreglo | Implementación con Lista Enlazada |
+| :--- | :--- | :--- |
+| **Insertar / Agregar** | **O(1)** (al final si hay espacio) / **O(N)** si busca casilla libre o valida duplicados. | **O(1)** (en la cabeza) / **O(N)** (al final o validando duplicados). |
+| **Eliminar / Quitar** | **O(N)** (se recorre para encontrar el objeto y dejar el slot libre). | **O(N)** (se recorre para encontrar el nodo y reconectar punteros). |
+| **Buscar** | **O(N)** (búsqueda secuencial) / **O(1)** si se conoce el índice exacto. | **O(N)** (recorrido secuencial nodo a nodo). |
+| **Uso de Memoria** | Fijo. Reserva todo el espacio contiguo desde la creación ($O(\text{Capacidad})$). | Dinámico. Ocupa memoria según uso ($O(N)$), aunque requiere punteros extra. |
 
-Los atributos de todas las clases son privados (guion bajo) y se acceden mediante métodos o `@property`.
+## 6. Tabla del experimento de alturas y su explicación
 
-## 4. Cómo ejecutarlo
+### **Tabla de Resultados (15 Claves)**
 
-Requiere Python 3. No usa librerías externas.
+| Condición de Inserción | Cantidad Datos | Altura Obtenida |
+| :--- | :---: | :---: |
+| **Claves Desordenadas** | 15 | 5 |
+| **Claves Ordenadas** | 15 | 15 |
 
-```bash
-python sistema_inventario.py
-```
+### **Explicación:**
+- **Claves Desordenadas:** Al insertar las claves en orden no secuencial, los nodos se reparten entre las ramas izquierda y derecha de manera equilibrada, manteniendo una altura baja de aproximadamente $O(\log_2 N)$.
+- **Claves Ordenadas:** Al insertar datos previamente ordenados, cada elemento nuevo se ubica siempre a la derecha del anterior. El árbol pierde su forma ramificada y se degenera en una **lista enlazada**, alcanzando una altura máxima igual al número total de elementos ($O(N)$).
 
-### Cambiar la implementación de la pila
+---
 
-En el bloque `main` hay una sola línea que decide qué pila se usa:
+## 7. Fotografía o imagen del dibujo de las rotaciones AVL
 
-```python
-pila_historial = PilaListaEnlazada()      # o: PilaArreglo(capacidad=5)
-```
-
-Además, la función `probar_inventario(mochila, historial)` ejecuta la misma demostración con lista enlazada y con arreglo, y el resultado es equivalente.
-
-## 5. Casos especiales controlados
-
-| Caso | Dónde se maneja |
-|---|---|
-| Estructura vacía | Mochila vacía, pila vacía, árbol vacío |
-| Eliminar el único elemento | `quitar_objeto` de la lista enlazada |
-| Clave que no existe | Búsqueda en el árbol, mochila y grafo |
-| Clave repetida | Árbol (ID duplicado), mochila (objeto repetido), grafo (conexión repetida) |
-| Estructura llena | Mochila de arreglo y pila de arreglo |
-
-## 6. Experimento del árbol
-
-Se insertaron las mismas 15 claves en dos árboles distintos y se midió la altura con un método recursivo.
-
-| Orden de inserción | Cantidad de datos | Altura |
-|---|---|---|
-| En desorden | 15 | 4 |
-| Ordenadas de menor a mayor | 15 | 15 |
-
-**Explicación:** el árbol binario de búsqueda no se reorganiza solo. Con datos ordenados, cada clave nueva es mayor que todas las anteriores y siempre va a la derecha, así que el árbol se convierte en una cadena, parecida a una lista enlazada. Con datos en desorden, las claves se reparten entre izquierda y derecha y el árbol queda más compacto.
-
-**Efecto en la búsqueda:** en el árbol compacto, cada comparación descarta aproximadamente la mitad de los datos, por lo que se necesitan pocos pasos. En el árbol en cadena hay que recorrer casi todos los nodos, igual que en una lista. Un árbol AVL evita este problema porque rota los nodos al detectar un desbalance y mantiene la altura baja.
-
-*(El dibujo a mano de las rotaciones AVL se muestra en el video.)*
-
-## 7. Limitaciones y mejoras posibles
-
-- **El árbol no se autobalancea.** Con datos ordenados se degrada a una cadena. Mejora: implementar un árbol AVL.
-- **Agregar a la mochila recorre toda la lista** hasta llegar al final. Mejora: guardar un puntero a la cola para insertar en tiempo constante.
-- **Al deshacer un "quitar", el objeto vuelve al final de la lista**, no a su posición original.
-- **La pila de arreglo tiene capacidad fija**: si el historial se llena, las nuevas acciones no se pueden deshacer.
-- **El grafo solo permite consultar conexiones directas.** Mejora: agregar recorridos (BFS/DFS) para saber si dos objetos se pueden obtener mediante varias combinaciones.
-
-## 8. Video
-
-[Pega aquí el enlace del video]
-
-## 9. Dibujos
 ![AVL](dibujos/1_avl_rotaciones.png)
 ![ABB](dibujos/2_abb_inserciones.png)
 ![Lista enlazada](dibujos/3_lista_insercion_eliminacion.png)
+
+## 8. Instrucciones para ejecutar el programa
+
+1. Asegúrate de tener instalado **Python 3** en tu computador.
+2. Guarda el código fuente en un archivo llamado `sistema_inventario.py`.
+3. Abre una consola o terminal de comandos en la carpeta donde guardaste el archivo.
+4. Ejecuta el comando:
+
+```bash
+python sistema_inventario.py
