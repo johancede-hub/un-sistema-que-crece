@@ -88,3 +88,24 @@ Este sistema simula la administración de objetos e inventario para un personaje
 
 ```bash
 python sistema_inventario.py
+
+## 9. Casos de prueba utilizados, incluidos los casos límite
+
+- **Validación de duplicados:** Se intenta agregar un objeto que ya existe en la mochila ("Madera") para comprobar que la función auxiliar `_existe()` evite elementos repetidos.
+- **Mochila llena (caso límite):** En `MochilaArreglo`, intentar insertar más objetos cuando la capacidad de slots (4) se encuentra rebasada.
+- **Pila vacía / Desapilar sin elementos (caso límite):** Intentar ejecutar `desapilar()` cuando la pila no tiene elementos (`cima == -1` o `cima is None`), verificando que no se produzcan errores en ejecución.
+- **Mochila vacía al quitar elemento (caso límite):** En `MochilaListaEnlazada`, intentar eliminar un objeto cuando `cabeza is None`.
+- **Deshacer acción con la Pila:** Registro de acciones ("Agregar Madera", "Agregar Hierro") y desapilado para revertir la última operación y eliminar el objeto correspondiente de la mochila.
+- **Inserción y recorrido Inorden en ABB:** Inserción de las claves 30, 10 y 50 y verificación de impresión en orden ascendente mediante `inorden()`.
+- **Conexiones y consultas en Grafo:** Creación de relaciones no dirigidas ("Madera"-"Palo" y "Madera"-"Hierro"), listado de combinaciones posibles, cálculo del grado y validación de adyacencia con `estan_conectados()`.
+- **Experimento de degeneración del árbol (caso límite):** Comparación de altura al insertar 15 claves desordenadas frente a 15 claves en orden estrictamente ascendente (demostrando la degeneración a lista enlazada).
+
+---
+
+## 10. Limitaciones y posibles mejoras
+
+
+
+---
+
+## 11. Enlace al video
