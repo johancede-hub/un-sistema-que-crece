@@ -108,3 +108,8 @@ Se insertaron las mismas 15 claves en dos árboles distintos y se midió la altu
 ## 8. Video
 
 [Pega aquí el enlace del video]
+
+## 9. Dibujos
+![AVL](dibujos/1_avl_rotaciones.png)
+![ABB](dibujos/2_abb_inserciones.png)
+![Lista enlazada](dibujos/3_lista_insercion_eliminacion.png)
