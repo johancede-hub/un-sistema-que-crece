@@ -111,3 +111,5 @@ Ejemplo de Mejoras: Evolucionar el ABB a un Árbol AVL para garantizar altura $O
 ---
 
 ## 11. Enlace al video
+
+https://fumcc-my.sharepoint.com/:v:/g/personal/johansebastiancedenollanten_fumc_edu_co/IQCgJ1DPNUcpQqO5o-K072rNAZzWdGt721QpmwVHhMVQizg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=kM3hMJ
