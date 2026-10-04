@@ -104,8 +104,10 @@ python sistema_inventario.py
 
 ## 10. Limitaciones y posibles mejoras
 
-Punto 10 (Limitaciones y Posibles Mejoras): Debes redactarlo.Ejemplo de Limitaciones: El ABB no se auto-balancea, por lo que sufre degradación a $O(N)$ si los IDs ingresan ordenados. La capacidad de MochilaArreglo y PilaArreglo es fija y puede sufrir desbordamiento (overflow). El grafo no soporta pesos en las recetas de crafteo (cantidad de materiales requeridos).Ejemplo de Mejoras: Evolucionar el ABB a un Árbol AVL para garantizar altura $O(\log_2 N)$, implementar redimensionamiento dinámico (resizing) en los arreglos, y convertir el grafo en un grafo dirigido y ponderado para indicar la cantidad de insumos requerida por receta.
-
+El ABB no se auto-balancea, por lo que sufre degradación a $O(N)$ si los IDs ingresan ordenados.
+La capacidad de MochilaArreglo y PilaArreglo es fija y puede sufrir desbordamiento (overflow).
+El grafo no soporta pesos en las recetas de crafteo (cantidad de materiales requeridos).
+Ejemplo de Mejoras: Evolucionar el ABB a un Árbol AVL para garantizar altura $O(\log_2 N)$, implementar redimensionamiento dinámico (resizing) en los arreglos, y convertir el grafo en un grafo dirigido y ponderado para indicar la cantidad de insumos requerida por receta.
 ---
 
 ## 11. Enlace al video
