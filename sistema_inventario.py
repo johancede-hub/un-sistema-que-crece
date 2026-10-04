@@ -253,9 +253,6 @@ class PilaListaEnlazada(Pila):
 
 # ==============================================================================
 # 4. ÁRBOL BINARIO DE BÚSQUEDA (CATÁLOGO POR ID)
-# EXPLICACIÓN RÁPIDA PARA EL VIDEO:
-# - Es una estructura jerárquica para buscar rápido por clave (ID).
-# - Regla: Si la clave a insertar es MENOR va a la IZQUIERDA. Si es MAYOR va a la DERECHA.
 # ==============================================================================
 
 class NodoArbol:
@@ -339,10 +336,6 @@ class ArbolBinarioBusqueda:
 
 # ==============================================================================
 # 5. GRAFO CON LISTA DE ADYACENCIA (RECETAS DE CRAFTEO)
-# EXPLICACIÓN RÁPIDA PARA EL VIDEO:
-# - Un Grafo no es jerárquico (no hay padre/hijo, solo conexiones directas).
-# - Cada objeto es un Vértice. Sus 'vecinos' son los objetos con los que se combina.
-# - Reutilizamos nuestra propia MochilaListaEnlazada para guardar esos vecinos.
 # ==============================================================================
 
 class NodoVertice:
